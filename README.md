@@ -1,74 +1,276 @@
-# Orcish Dashboard
+# 📊 Analytics Dashboard
 
-![orcish-dashboard](https://github.com/user-attachments/assets/cb458deb-9ba3-435e-a39c-7f48095c85c8)
+A modern, responsive analytics dashboard built with Next.js 15, React 19, and TypeScript. Features comprehensive data visualization, advanced filtering, and beautiful chart components with dark mode support.
 
-## Overview
+## ✨ Features
 
-The Orcish Dashboard is a sleek and modern dashboard built with Shadcn. It features a responsive design with support for both light and dark modes, along with a customizable theme selector that lets you easily switch between different color schemes.
+### 📈 **Performance Analytics**
 
-# Award-Winning Marketing Analytics Dashboard
+- Interactive area, line, and bar charts with Recharts
+- Dynamic metric selection (Revenue, Users, Conversions)
+- Time range filtering (7d, 30d, 90d)
+- Color-coded chart type buttons with theme support
+- Real-time data visualization with smooth animations
 
-A modern, responsive digital marketing analytics dashboard built with Next.js 15, TypeScript, and shadcn/ui components.
+### 🔍 **Advanced Analytics & Filtering**
 
-## 🌟 Features
+- Multi-dimensional filtering system:
+  - Date range picker with preset options
+  - Budget range filters ($1K - $100K+)
+  - ROAS (Return on Ad Spend) filtering
+  - Platform-based filtering (Google Ads, Facebook, etc.)
+  - Campaign status filtering (Active, Paused, Completed)
+- Pagination system (10 items per page)
+- Real-time filter application with instant results
 
-### 📊 Core Dashboard Features
+### 🥧 **Traffic Sources Analysis**
 
-- **Overview Page** with key metrics cards (Revenue, Users, Conversions, Growth %)
-- **Interactive Charts** - Area, Line, Bar, and Pie charts with filtering
-- **Data Table** with sorting, filtering, and pagination for campaign management
-- **Responsive Design** - Perfect on desktop, tablet, and mobile
+- Interactive pie chart visualization
+- Comprehensive source breakdown (Organic Search, Social Media, Email, etc.)
+- Detailed legend with visitor counts and percentages
+- Color-coded source identification
 
-### 🎨 UI/UX Excellence
+### 📤 **Export Functionality**
 
-- **Modern Design System** with consistent colors, typography, and spacing
-- **Beautiful Visual Hierarchy** with clear information architecture
-- **Smooth Animations** and micro-interactions
-- **Dark/Light Mode Toggle** with system preference detection
-- **Loading Skeletons** for enhanced perceived performance
+- Multiple export formats: CSV, Excel, PDF
+- Filtered data export capability
+- Professional formatting with proper headers
+- Real-time export progress indicators
 
-### ⚡ Technical Implementation
+### 🎨 **UI/UX Excellence**
 
-- **Next.js 15** with App Router
-- **TypeScript** for type safety
-- **shadcn/ui** component library
-- **Recharts** for data visualization
-- **Tailwind CSS** for styling
-- **Real-time Updates** simulation
-- **Export Functionality** (simulated)
+- Modern shadcn/ui component library
+- Full dark/light mode support with theme persistence
+- Responsive design for all screen sizes
+- Beautiful gradient backgrounds and hover effects
+- Professional color scheme with accessibility focus
 
-### 🚀 Bonus Features
+## 🚀 Quick Start
 
-- **Real-time Data Updates** with toggle
-- **Campaign Performance Table** with advanced filtering
-- **Traffic Source Analytics** with interactive pie charts
-- **Platform-specific Campaign Management** (Google Ads, Facebook, LinkedIn, etc.)
-- **ROAS Tracking** and budget utilization visualization
-- **Beautiful Loading States** and error handling
+### Prerequisites
 
-## 🏗️ Project Structure
+- Node.js 18+
+- npm, yarn, or pnpm package manager
+
+### Installation
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/ADML003/analytics_dashboard.git
+cd analytics_dashboard
+```
+
+2. **Install dependencies:**
+
+```bash
+# Using npm
+npm install
+
+# Using yarn
+yarn install
+
+# Using pnpm (recommended)
+pnpm install
+```
+
+3. **Run the development server:**
+
+```bash
+# Using npm
+npm run dev
+
+# Using yarn
+yarn dev
+
+# Using pnpm
+pnpm dev
+```
+
+4. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000) to view the dashboard.
+
+## 🛠️ Tech Stack
+
+### **Core Framework**
+
+- **Next.js 15** - React framework with App Router
+- **React 19** - Latest React features and optimizations
+- **TypeScript** - Type-safe development experience
+
+### **Styling & UI**
+
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Modern component library
+- **Lucide React** - Beautiful icon library
+- **CSS Modules** - Scoped styling for components
+
+### **Data Visualization**
+
+- **Recharts** - Powerful charting library for React
+- **Custom Chart Components** - Themed and interactive visualizations
+
+### **Development Tools**
+
+- **ESLint** - Code linting and quality assurance
+- **PostCSS** - CSS processing and optimization
+
+## 📁 Project Structure
 
 ```
 analytics_dashboard/
-├── app/
-│   ├── dashboard/
-│   │   └── page.tsx          # Main dashboard page
-│   ├── globals.css           # Global styles with custom animations
-│   ├── layout.tsx            # Root layout with theme provider
-│   └── page.tsx              # Landing page
-├── components/
-│   ├── ui/                   # shadcn/ui components
-│   ├── analytics-charts.tsx  # Interactive chart components
-│   ├── campaign-table.tsx    # Advanced data table
-│   ├── marketing-dashboard.tsx # Main dashboard container
-│   ├── metrics-overview.tsx  # KPI cards component
-│   ├── loading-skeletons.tsx # Loading state components
-│   └── app-sidebar.tsx       # Navigation sidebar
-├── lib/
-│   ├── marketing-data.ts     # Mock data generation and types
-│   └── utils.ts              # Utility functions
-└── package.json
+├── app/                          # Next.js App Router
+│   ├── dashboard/               # Dashboard pages
+│   ├── globals.css             # Global styles
+│   ├── layout.tsx              # Root layout
+│   └── page.tsx                # Home page
+├── components/                  # React components
+│   ├── ui/                     # shadcn/ui components
+│   ├── providers/              # Context providers
+│   ├── advanced-analytics.tsx  # Advanced filtering component
+│   ├── analytics-charts.tsx    # Chart visualization component
+│   ├── marketing-dashboard.tsx # Main dashboard component
+│   └── ...                    # Other dashboard components
+├── hooks/                      # Custom React hooks
+├── lib/                        # Utility functions
+│   ├── marketing-data.ts       # Data management
+│   ├── export-utils.ts         # Export functionality
+│   └── utils.ts                # General utilities
+├── types/                      # TypeScript type definitions
+└── public/                     # Static assets
 ```
+
+## 🎯 Key Components
+
+### **AnalyticsCharts**
+
+- Multi-chart visualization (Area, Line, Bar)
+- Dynamic metric switching
+- Color-themed buttons with dark mode support
+- Interactive tooltips and legends
+
+### **AdvancedAnalytics**
+
+- Comprehensive filtering interface
+- Real-time data filtering
+- Pagination with customizable page sizes
+- Export functionality integration
+
+### **MarketingDashboard**
+
+- Main dashboard orchestration
+- Responsive layout management
+- Theme provider integration
+- Component composition and data flow
+
+## 🎨 Theme System
+
+The dashboard features a sophisticated theming system:
+
+- **Light Mode**: Clean, professional appearance
+- **Dark Mode**: Eye-friendly dark interface
+- **Color Schemes**:
+  - 🟢 Emerald (Area Charts)
+  - 🔵 Blue (Line Charts)
+  - 🟡 Amber (Bar Charts)
+- **Automatic Theme Detection**: Respects system preferences
+- **Manual Theme Toggle**: User-controlled theme switching
+
+## 📊 Data Management
+
+### **Sample Data Structure**
+
+```typescript
+interface ChartDataPoint {
+  date: string;
+  revenue: number;
+  users: number;
+  conversions: number;
+  impressions: number;
+  clicks: number;
+}
+
+interface TrafficSource {
+  source: string;
+  visitors: number;
+  percentage: number;
+}
+```
+
+### **Marketing Campaign Data**
+
+- Campaign performance metrics
+- Budget allocation tracking
+- ROAS calculations
+- Platform-specific analytics
+
+## 🚀 Deployment
+
+### **Vercel (Recommended)**
+
+```bash
+npm i -g vercel
+vercel
+```
+
+### **Other Platforms**
+
+- **Netlify**: Deploy via Git integration
+- **Railway**: Simple deployment with railway.app
+- **Self-hosted**: Build and serve static files
+
+### **Build for Production**
+
+```bash
+npm run build
+npm start
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **shadcn/ui** for the beautiful component library
+- **Recharts** for powerful data visualization
+- **Next.js team** for the excellent framework
+- **Tailwind CSS** for the utility-first approach
+
+---
+
+**Built with ❤️ using AI-assisted development**
+
+For questions or support, please open an issue in the GitHub repository.
+analytics_dashboard/
+├── app/
+│ ├── dashboard/
+│ │ └── page.tsx # Main dashboard page
+│ ├── globals.css # Global styles with custom animations
+│ ├── layout.tsx # Root layout with theme provider
+│ └── page.tsx # Landing page
+├── components/
+│ ├── ui/ # shadcn/ui components
+│ ├── analytics-charts.tsx # Interactive chart components
+│ ├── campaign-table.tsx # Advanced data table
+│ ├── marketing-dashboard.tsx # Main dashboard container
+│ ├── metrics-overview.tsx # KPI cards component
+│ ├── loading-skeletons.tsx # Loading state components
+│ └── app-sidebar.tsx # Navigation sidebar
+├── lib/
+│ ├── marketing-data.ts # Mock data generation and types
+│ └── utils.ts # Utility functions
+└── package.json
+
+````
 
 ## 🎯 Marketing-Focused Analytics
 
@@ -100,7 +302,7 @@ analytics_dashboard/
 
    ```bash
    pnpm install
-   ```
+````
 
 2. **Run Development Server**
 

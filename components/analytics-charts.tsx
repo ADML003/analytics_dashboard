@@ -243,21 +243,21 @@ export function AnalyticsCharts({
             <TabsList className="grid w-full grid-cols-3 h-12 p-1 bg-muted/50">
               <TabsTrigger
                 value="area"
-                className="flex items-center gap-2 h-10 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                className="flex items-center gap-2 h-10 bg-emerald-100 text-emerald-800 border border-emerald-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/25 hover:bg-emerald-200 transition-all duration-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-800 dark:hover:bg-emerald-800/50"
               >
                 <Activity className="h-4 w-4" />
                 Area Chart
               </TabsTrigger>
               <TabsTrigger
                 value="line"
-                className="flex items-center gap-2 h-10 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                className="flex items-center gap-2 h-10 bg-blue-100 text-blue-800 border border-blue-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/25 hover:bg-blue-200 transition-all duration-200 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-800 dark:hover:bg-blue-800/50"
               >
                 <TrendingUp className="h-4 w-4" />
                 Line Chart
               </TabsTrigger>
               <TabsTrigger
                 value="bar"
-                className="flex items-center gap-2 h-10 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                className="flex items-center gap-2 h-10 bg-amber-100 text-amber-800 border border-amber-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-amber-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-amber-500/25 hover:bg-amber-200 transition-all duration-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-800 dark:hover:bg-amber-800/50"
               >
                 <BarChart3 className="h-4 w-4" />
                 Bar Chart
