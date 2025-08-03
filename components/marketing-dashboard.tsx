@@ -1,30 +1,33 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   RefreshCw,
   Download,
-  Calendar,
   TrendingUp,
   Users,
   Target,
   DollarSign,
   Activity,
   Zap,
+  FileText,
+  Table,
+  ChevronDown,
 } from "lucide-react";
 import { MetricsOverview } from "@/components/metrics-overview";
 import { AnalyticsCharts } from "@/components/analytics-charts";
 import { CampaignTable } from "@/components/campaign-table";
+import { AdvancedAnalytics } from "@/components/advanced-analytics";
 import {
   MetricsSkeletonLoader,
   ChartSkeletonLoader,
@@ -41,6 +44,12 @@ import {
   type MetricCard,
   type TrafficSource,
 } from "@/lib/marketing-data";
+import {
+  exportDashboardToPDF,
+  exportAllDataToCSV,
+  exportCampaignDataToCSV,
+  type ExportData,
+} from "@/lib/export-utils";
 import { toast } from "sonner";
 
 export function MarketingDashboard() {
@@ -104,9 +113,36 @@ export function MarketingDashboard() {
     toast.success("Dashboard refreshed!");
   };
 
-  const handleExport = () => {
-    // Simulate export functionality
-    toast.success("Export started! You will receive an email when complete.");
+  const handleExport = (format: "pdf" | "csv" = "pdf") => {
+    try {
+      const exportData: ExportData = {
+        metrics,
+        chartData,
+        campaignData,
+        trafficSources,
+      };
+
+      if (format === "pdf") {
+        exportDashboardToPDF(exportData);
+        toast.success("PDF report downloaded successfully!");
+      } else {
+        exportAllDataToCSV(exportData);
+        toast.success("CSV files downloaded successfully!");
+      }
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export data. Please try again.");
+    }
+  };
+
+  const handleCampaignExport = () => {
+    try {
+      exportCampaignDataToCSV(campaignData);
+      toast.success("Campaign data exported to CSV!");
+    } catch (error) {
+      console.error("Campaign export error:", error);
+      toast.error("Failed to export campaign data. Please try again.");
+    }
   };
 
   const toggleRealTime = () => {
@@ -189,10 +225,25 @@ export function MarketingDashboard() {
             />
             Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={handleExport}>
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export
+                <ChevronDown className="h-4 w-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                <FileText className="h-4 w-4 mr-2" />
+                Export as PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleExport("csv")}>
+                <Table className="h-4 w-4 mr-2" />
+                Export as CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -290,27 +341,10 @@ export function MarketingDashboard() {
         </TabsList>
 
         <TabsContent value="campaigns" className="space-y-4">
-          <CampaignTable data={campaignData} onExport={handleExport} />
+          <CampaignTable data={campaignData} onExport={handleCampaignExport} />
         </TabsContent>
-
         <TabsContent value="analytics" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Advanced Analytics</CardTitle>
-              <CardDescription>
-                Coming soon: Attribution analysis, customer journey mapping, and
-                predictive insights
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-center h-64">
-              <div className="text-center space-y-2">
-                <Calendar className="h-12 w-12 mx-auto text-muted-foreground" />
-                <p className="text-muted-foreground">
-                  Advanced analytics features are in development
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <AdvancedAnalytics campaignData={campaignData} />
         </TabsContent>
       </Tabs>
     </div>
