@@ -278,9 +278,9 @@ export function AdvancedAnalytics({ campaignData }: AdvancedAnalyticsProps) {
       {/* Advanced Filters */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+            <div className="text-center sm:text-left">
+              <CardTitle className="flex items-center justify-center sm:justify-start gap-2">
                 <Filter className="h-5 w-5" />
                 Advanced Filters
               </CardTitle>
@@ -289,11 +289,21 @@ export function AdvancedAnalytics({ campaignData }: AdvancedAnalyticsProps) {
                 metrics
               </CardDescription>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={clearFilters}>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearFilters}
+                className="w-full sm:w-auto"
+              >
                 Clear Filters
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExport}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExport}
+                className="w-full sm:w-auto"
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </Button>
