@@ -187,7 +187,7 @@ export function AnalyticsCharts({
                 {data.payload.source}
               </div>
             </div>
-            <div className="text-sm text-muted-foreground font-medium">
+            <div className={`text-sm ${styles.pieTooltipText}`}>
               {formatNumber(data.value)} visitors ({data.payload.percentage}%)
             </div>
           </div>
