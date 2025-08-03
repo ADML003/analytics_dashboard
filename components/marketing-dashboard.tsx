@@ -179,71 +179,73 @@ export function MarketingDashboard() {
   return (
     <div className="space-y-6">
       {/* Dashboard Header */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between text-center sm:text-left space-y-4 sm:space-y-0">
+        <div className="w-full sm:w-auto">
           <h1 className="text-3xl font-bold tracking-tight">
             Marketing Analytics
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground max-w-lg mx-auto sm:mx-0">
             Monitor your digital marketing performance across all channels
           </p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col items-center sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
           <div className="text-sm text-muted-foreground">
             Last updated: {lastUpdated.toLocaleTimeString()}
           </div>
-          {realTimeEnabled && (
-            <Badge
-              variant="secondary"
-              className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+          <div className="flex items-center space-x-2">
+            {realTimeEnabled && (
+              <Badge
+                variant="secondary"
+                className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+              >
+                <Activity className="h-3 w-3 mr-1" />
+                Live
+              </Badge>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleRealTime}
+              className={
+                realTimeEnabled
+                  ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
+                  : ""
+              }
             >
-              <Activity className="h-3 w-3 mr-1" />
-              Live
-            </Badge>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={toggleRealTime}
-            className={
-              realTimeEnabled
-                ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
-                : ""
-            }
-          >
-            <Zap className="h-4 w-4 mr-2" />
-            Real-time
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-          >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
-            />
-            Refresh
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-                <ChevronDown className="h-4 w-4 ml-2" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleExport("pdf")}>
-                <FileText className="h-4 w-4 mr-2" />
-                Export as PDF
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleExport("csv")}>
-                <Table className="h-4 w-4 mr-2" />
-                Export as CSV
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <Zap className="h-4 w-4 mr-2" />
+              Real-time
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+            >
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                  <ChevronDown className="h-4 w-4 ml-2" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Export as PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("csv")}>
+                  <Table className="h-4 w-4 mr-2" />
+                  Export as CSV
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
 

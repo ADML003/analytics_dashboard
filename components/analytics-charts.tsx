@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -77,6 +77,27 @@ export function AnalyticsCharts({
 }: AnalyticsChartsProps) {
   const [timeRange, setTimeRange] = useState("30d");
   const [selectedMetric, setSelectedMetric] = useState("revenue");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
+  // Get responsive pie chart radius
+  const getPieRadius = () => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 640) return { outer: 60, inner: 25 }; // xs
+      if (window.innerWidth < 768) return { outer: 80, inner: 35 }; // sm
+    }
+    return { outer: 100, inner: 40 }; // default
+  };
 
   // Helper function to get color class for traffic sources
   const getTrafficSourceColorClass = (source: string) => {
@@ -198,26 +219,26 @@ export function AnalyticsCharts({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 px-2 sm:px-0">
       {/* Performance Charts */}
       <Card
         className={`border-0 shadow-sm bg-gradient-to-br from-background to-muted/20 ${getPerformanceCardClass()}`}
       >
-        <CardHeader className="flex flex-row items-center justify-between pb-6">
-          <div className="space-y-2">
-            <CardTitle className="flex items-center gap-3 text-xl">
+        <CardHeader className="flex flex-col items-center sm:flex-row sm:items-start sm:justify-between pb-6 space-y-4 sm:space-y-0 text-center sm:text-left">
+          <div className="space-y-2 w-full sm:w-auto">
+            <CardTitle className="flex items-center justify-center sm:justify-start gap-3 text-xl">
               <div className="p-2 rounded-lg bg-primary/10">
                 <TrendingUp className="h-6 w-6 text-primary" />
               </div>
               Performance Analytics
             </CardTitle>
-            <CardDescription className="text-base">
+            <CardDescription className="text-base max-w-md mx-auto sm:mx-0">
               Track your marketing performance over time with detailed insights
             </CardDescription>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
             <Select value={selectedMetric} onValueChange={setSelectedMetric}>
-              <SelectTrigger className="w-[150px] border-2 hover:border-primary/30 transition-colors">
+              <SelectTrigger className="w-full sm:w-[150px] border-2 hover:border-primary/30 transition-colors">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -227,7 +248,7 @@ export function AnalyticsCharts({
               </SelectContent>
             </Select>
             <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger className="w-[100px] border-2 hover:border-primary/30 transition-colors">
+              <SelectTrigger className="w-full sm:w-[100px] border-2 hover:border-primary/30 transition-colors">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -243,29 +264,34 @@ export function AnalyticsCharts({
             <TabsList className="grid w-full grid-cols-3 h-12 p-1 bg-muted/50">
               <TabsTrigger
                 value="area"
-                className="flex items-center gap-2 h-10 bg-emerald-100 text-emerald-800 border border-emerald-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/25 hover:bg-emerald-200 transition-all duration-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-800 dark:hover:bg-emerald-800/50"
+                className="flex items-center gap-1 sm:gap-2 h-10 bg-emerald-100 text-emerald-800 border border-emerald-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/25 hover:bg-emerald-200 transition-all duration-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-800 dark:hover:bg-emerald-800/50 text-xs sm:text-sm"
               >
-                <Activity className="h-4 w-4" />
-                Area Chart
+                <Activity className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Area Chart</span>
+                <span className="sm:hidden">Area</span>
               </TabsTrigger>
               <TabsTrigger
                 value="line"
-                className="flex items-center gap-2 h-10 bg-blue-100 text-blue-800 border border-blue-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/25 hover:bg-blue-200 transition-all duration-200 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-800 dark:hover:bg-blue-800/50"
+                className="flex items-center gap-1 sm:gap-2 h-10 bg-blue-100 text-blue-800 border border-blue-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/25 hover:bg-blue-200 transition-all duration-200 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-800 dark:hover:bg-blue-800/50 text-xs sm:text-sm"
               >
-                <TrendingUp className="h-4 w-4" />
-                Line Chart
+                <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Line Chart</span>
+                <span className="sm:hidden">Line</span>
               </TabsTrigger>
               <TabsTrigger
                 value="bar"
-                className="flex items-center gap-2 h-10 bg-amber-100 text-amber-800 border border-amber-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-amber-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-amber-500/25 hover:bg-amber-200 transition-all duration-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-800 dark:hover:bg-amber-800/50"
+                className="flex items-center gap-1 sm:gap-2 h-10 bg-amber-100 text-amber-800 border border-amber-200 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-500 data-[state=active]:to-amber-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-amber-500/25 hover:bg-amber-200 transition-all duration-200 dark:bg-amber-900/50 dark:text-amber-300 dark:border-amber-800 dark:hover:bg-amber-800/50 text-xs sm:text-sm"
               >
-                <BarChart3 className="h-4 w-4" />
-                Bar Chart
+                <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Bar Chart</span>
+                <span className="sm:hidden">Bar</span>
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="area" className="space-y-4">
-              <div className="h-[450px] rounded-lg border bg-muted/20 p-4">
+              <div
+                className={`h-[450px] md:h-[480px] sm:h-[300px] xs:h-[250px] rounded-lg border bg-muted/20 p-4 ${styles.chartContainer}`}
+              >
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={chartData}>
                     <defs>
@@ -330,8 +356,12 @@ export function AnalyticsCharts({
                     />
                     <XAxis
                       dataKey="date"
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                       className="text-muted-foreground"
+                      interval={isMobile ? "preserveStartEnd" : "preserveStart"}
+                      angle={isMobile ? 0 : -45}
+                      textAnchor={isMobile ? "middle" : "end"}
+                      height={isMobile ? 40 : 60}
                       tickFormatter={(value) =>
                         new Date(value).toLocaleDateString("en-US", {
                           month: "short",
@@ -340,8 +370,9 @@ export function AnalyticsCharts({
                       }
                     />
                     <YAxis
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                       className="text-muted-foreground"
+                      width={isMobile ? 40 : 60}
                       tickFormatter={(value) =>
                         selectedMetric === "revenue" ? `$${value}` : value
                       }
@@ -358,7 +389,7 @@ export function AnalyticsCharts({
                         selectedMetric.charAt(0).toUpperCase() +
                         selectedMetric.slice(1)
                       })`}
-                      strokeWidth={3}
+                      strokeWidth={isMobile ? 2 : 3}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -366,7 +397,9 @@ export function AnalyticsCharts({
             </TabsContent>
 
             <TabsContent value="line" className="space-y-4">
-              <div className="h-[450px] rounded-lg border bg-muted/20 p-4">
+              <div
+                className={`h-[450px] md:h-[480px] sm:h-[300px] xs:h-[250px] rounded-lg border bg-muted/20 p-4 ${styles.chartContainer}`}
+              >
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
                     <CartesianGrid
@@ -375,8 +408,12 @@ export function AnalyticsCharts({
                     />
                     <XAxis
                       dataKey="date"
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                       className="text-muted-foreground"
+                      interval={isMobile ? "preserveStartEnd" : "preserveStart"}
+                      angle={isMobile ? 0 : -45}
+                      textAnchor={isMobile ? "middle" : "end"}
+                      height={isMobile ? 40 : 60}
                       tickFormatter={(value) =>
                         new Date(value).toLocaleDateString("en-US", {
                           month: "short",
@@ -385,8 +422,9 @@ export function AnalyticsCharts({
                       }
                     />
                     <YAxis
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                       className="text-muted-foreground"
+                      width={isMobile ? 40 : 60}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
@@ -394,15 +432,15 @@ export function AnalyticsCharts({
                       type="monotone"
                       dataKey="revenue"
                       stroke={chartColors.revenue}
-                      strokeWidth={3}
+                      strokeWidth={isMobile ? 2 : 3}
                       dot={{
-                        r: 4,
+                        r: isMobile ? 3 : 4,
                         fill: chartColors.revenue,
                         strokeWidth: 2,
                         stroke: "#fff",
                       }}
                       activeDot={{
-                        r: 6,
+                        r: isMobile ? 5 : 6,
                         fill: chartColors.revenue,
                         strokeWidth: 2,
                         stroke: "#fff",
@@ -412,15 +450,15 @@ export function AnalyticsCharts({
                       type="monotone"
                       dataKey="users"
                       stroke={chartColors.users}
-                      strokeWidth={3}
+                      strokeWidth={isMobile ? 2 : 3}
                       dot={{
-                        r: 4,
+                        r: isMobile ? 3 : 4,
                         fill: chartColors.users,
                         strokeWidth: 2,
                         stroke: "#fff",
                       }}
                       activeDot={{
-                        r: 6,
+                        r: isMobile ? 5 : 6,
                         fill: chartColors.users,
                         strokeWidth: 2,
                         stroke: "#fff",
@@ -430,15 +468,15 @@ export function AnalyticsCharts({
                       type="monotone"
                       dataKey="conversions"
                       stroke={chartColors.conversions}
-                      strokeWidth={3}
+                      strokeWidth={isMobile ? 2 : 3}
                       dot={{
-                        r: 4,
+                        r: isMobile ? 3 : 4,
                         fill: chartColors.conversions,
                         strokeWidth: 2,
                         stroke: "#fff",
                       }}
                       activeDot={{
-                        r: 6,
+                        r: isMobile ? 5 : 6,
                         fill: chartColors.conversions,
                         strokeWidth: 2,
                         stroke: "#fff",
@@ -450,7 +488,9 @@ export function AnalyticsCharts({
             </TabsContent>
 
             <TabsContent value="bar" className="space-y-4">
-              <div className="h-[450px] rounded-lg border bg-muted/20 p-4">
+              <div
+                className={`h-[450px] md:h-[480px] sm:h-[300px] xs:h-[250px] rounded-lg border bg-muted/20 p-4 ${styles.chartContainer}`}
+              >
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
                     <CartesianGrid
@@ -459,8 +499,12 @@ export function AnalyticsCharts({
                     />
                     <XAxis
                       dataKey="date"
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                       className="text-muted-foreground"
+                      interval={isMobile ? "preserveStartEnd" : "preserveStart"}
+                      angle={isMobile ? 0 : -45}
+                      textAnchor={isMobile ? "middle" : "end"}
+                      height={isMobile ? 40 : 60}
                       tickFormatter={(value) =>
                         new Date(value).toLocaleDateString("en-US", {
                           month: "short",
@@ -469,8 +513,9 @@ export function AnalyticsCharts({
                       }
                     />
                     <YAxis
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                       className="text-muted-foreground"
+                      width={isMobile ? 40 : 60}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
@@ -513,7 +558,9 @@ export function AnalyticsCharts({
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="h-[350px] rounded-lg border bg-muted/20 p-4">
+          <div
+            className={`h-[350px] md:h-[350px] sm:h-[280px] xs:h-[220px] rounded-lg border bg-muted/20 p-4 ${styles.pieChartContainer}`}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -522,10 +569,12 @@ export function AnalyticsCharts({
                   nameKey="source"
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
-                  innerRadius={40}
-                  label={({ source, percentage }) =>
-                    `${source}: ${percentage}%`
+                  outerRadius={getPieRadius().outer}
+                  innerRadius={getPieRadius().inner}
+                  label={
+                    isMobile
+                      ? false
+                      : ({ source, percentage }) => `${source}: ${percentage}%`
                   }
                   labelLine={false}
                 >
@@ -546,7 +595,9 @@ export function AnalyticsCharts({
           </div>
 
           {/* Traffic Sources Legend */}
-          <div className="grid grid-cols-1 gap-3 mt-6">
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 ${styles.legendGrid}`}
+          >
             {trafficSources.map((source) => (
               <div key={source.source} className={styles.legendItem}>
                 <div className="flex items-center justify-between">
