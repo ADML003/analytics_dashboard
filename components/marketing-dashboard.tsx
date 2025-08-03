@@ -1,0 +1,318 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  RefreshCw,
+  Download,
+  Calendar,
+  TrendingUp,
+  Users,
+  Target,
+  DollarSign,
+  Activity,
+  Zap,
+} from "lucide-react";
+import { MetricsOverview } from "@/components/metrics-overview";
+import { AnalyticsCharts } from "@/components/analytics-charts";
+import { CampaignTable } from "@/components/campaign-table";
+import {
+  MetricsSkeletonLoader,
+  ChartSkeletonLoader,
+  TableSkeletonLoader,
+} from "@/components/loading-skeletons";
+import {
+  generateMetrics,
+  generateChartData,
+  generateCampaignData,
+  generateTrafficSources,
+  simulateRealTimeUpdates,
+  type ChartDataPoint,
+  type CampaignData,
+  type MetricCard,
+  type TrafficSource,
+} from "@/lib/marketing-data";
+import { toast } from "sonner";
+
+export function MarketingDashboard() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [realTimeEnabled, setRealTimeEnabled] = useState(false);
+
+  // Data state
+  const [metrics, setMetrics] = useState<MetricCard[]>([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  const [campaignData, setCampaignData] = useState<CampaignData[]>([]);
+  const [trafficSources, setTrafficSources] = useState<TrafficSource[]>([]);
+
+  // Initialize data
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+
+      // Simulate loading delay for realistic experience
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      setMetrics(generateMetrics());
+      setChartData(generateChartData());
+      setCampaignData(generateCampaignData());
+      setTrafficSources(generateTrafficSources());
+      setLastUpdated(new Date());
+      setIsLoading(false);
+
+      toast.success("Dashboard data loaded successfully!");
+    };
+
+    loadData();
+  }, []);
+
+  // Real-time updates
+  useEffect(() => {
+    if (!realTimeEnabled) return;
+
+    const interval = setInterval(() => {
+      setChartData((prev) => simulateRealTimeUpdates(prev));
+      setLastUpdated(new Date());
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [realTimeEnabled]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+
+    // Simulate refresh delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setMetrics(generateMetrics());
+    setChartData(generateChartData());
+    setCampaignData(generateCampaignData());
+    setTrafficSources(generateTrafficSources());
+    setLastUpdated(new Date());
+    setIsRefreshing(false);
+
+    toast.success("Dashboard refreshed!");
+  };
+
+  const handleExport = () => {
+    // Simulate export functionality
+    toast.success("Export started! You will receive an email when complete.");
+  };
+
+  const toggleRealTime = () => {
+    setRealTimeEnabled(!realTimeEnabled);
+    toast.info(
+      realTimeEnabled
+        ? "Real-time updates disabled"
+        : "Real-time updates enabled"
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        {/* Header Skeleton */}
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <div className="h-8 w-64 bg-gray-200 rounded dark:bg-gray-700 animate-pulse" />
+            <div className="h-4 w-96 bg-gray-200 rounded dark:bg-gray-700 animate-pulse" />
+          </div>
+          <div className="flex space-x-2">
+            <div className="h-10 w-24 bg-gray-200 rounded dark:bg-gray-700 animate-pulse" />
+            <div className="h-10 w-20 bg-gray-200 rounded dark:bg-gray-700 animate-pulse" />
+          </div>
+        </div>
+
+        <MetricsSkeletonLoader />
+        <ChartSkeletonLoader />
+        <TableSkeletonLoader />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Dashboard Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Marketing Analytics
+          </h1>
+          <p className="text-muted-foreground">
+            Monitor your digital marketing performance across all channels
+          </p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="text-sm text-muted-foreground">
+            Last updated: {lastUpdated.toLocaleTimeString()}
+          </div>
+          {realTimeEnabled && (
+            <Badge
+              variant="secondary"
+              className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+            >
+              <Activity className="h-3 w-3 mr-1" />
+              Live
+            </Badge>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleRealTime}
+            className={
+              realTimeEnabled
+                ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
+                : ""
+            }
+          >
+            <Zap className="h-4 w-4 mr-2" />
+            Real-time
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+          >
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleExport}>
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+        </div>
+      </div>
+
+      {/* Key Metrics */}
+      <MetricsOverview metrics={metrics} />
+
+      {/* Analytics Charts */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <AnalyticsCharts
+            chartData={chartData}
+            trafficSources={trafficSources}
+          />
+        </div>
+
+        {/* Quick Stats Sidebar */}
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Quick Stats</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <DollarSign className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Avg. Revenue/Day</span>
+                </div>
+                <span className="font-medium">$9,492</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Users className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Avg. Users/Day</span>
+                </div>
+                <span className="font-medium">1,631</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Target className="h-4 w-4 text-purple-600" />
+                  <span className="text-sm">Conversion Rate</span>
+                </div>
+                <span className="font-medium">5.8%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="h-4 w-4 text-orange-600" />
+                  <span className="text-sm">Growth Rate</span>
+                </div>
+                <span className="font-medium text-green-600">+23.4%</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">
+                Top Performing Campaigns
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {campaignData
+                .sort((a, b) => b.roas - a.roas)
+                .slice(0, 3)
+                .map((campaign) => (
+                  <div
+                    key={campaign.id}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="space-y-1">
+                      <div className="text-sm font-medium">
+                        {campaign.campaign}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {campaign.platform}
+                      </div>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    >
+                      {campaign.roas.toFixed(1)}x ROAS
+                    </Badge>
+                  </div>
+                ))}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Campaign Performance Table */}
+      <Tabs defaultValue="campaigns" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="campaigns">Campaign Performance</TabsTrigger>
+          <TabsTrigger value="analytics">Advanced Analytics</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="campaigns" className="space-y-4">
+          <CampaignTable data={campaignData} onExport={handleExport} />
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Advanced Analytics</CardTitle>
+              <CardDescription>
+                Coming soon: Attribution analysis, customer journey mapping, and
+                predictive insights
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center justify-center h-64">
+              <div className="text-center space-y-2">
+                <Calendar className="h-12 w-12 mx-auto text-muted-foreground" />
+                <p className="text-muted-foreground">
+                  Advanced analytics features are in development
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
