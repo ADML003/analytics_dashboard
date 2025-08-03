@@ -36,7 +36,7 @@ This analytics dashboard was developed using AI-assisted programming methodology
 
 ## AI vs Manual Work Split
 
-- **AI-generated (75%)**:
+- **AI-generated (60%)**:
 
   - Complete component structure and TypeScript interfaces
   - Complex filtering and pagination logic implementation
@@ -45,7 +45,7 @@ This analytics dashboard was developed using AI-assisted programming methodology
   - Responsive design patterns and theme system implementation
   - Data processing functions and utility helpers
 
-- **Manual coding (15%)**:
+- **Manual coding (30%)**:
 
   - Project architecture decisions and file organization
   - Custom styling adjustments and fine-tuning
