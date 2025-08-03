@@ -116,7 +116,13 @@ export function CampaignTable({ data, onExport }: CampaignTableProps) {
             "platform"
           ) as keyof typeof platformColors;
           return (
-            <Badge variant="secondary" className={platformColors[platform]}>
+            <Badge
+              variant="secondary"
+              className={cn(
+                platformColors[platform],
+                "text-xs px-2 py-1 whitespace-nowrap"
+              )}
+            >
               {platform}
             </Badge>
           );
@@ -128,7 +134,13 @@ export function CampaignTable({ data, onExport }: CampaignTableProps) {
         cell: ({ row }) => {
           const status = row.getValue("status") as keyof typeof statusColors;
           return (
-            <Badge variant="secondary" className={statusColors[status]}>
+            <Badge
+              variant="secondary"
+              className={cn(
+                statusColors[status],
+                "text-xs px-2 py-1 whitespace-nowrap"
+              )}
+            >
               {status}
             </Badge>
           );
@@ -273,13 +285,14 @@ export function CampaignTable({ data, onExport }: CampaignTableProps) {
           return (
             <Badge
               variant={roas >= 3 ? "default" : "secondary"}
-              className={
+              className={cn(
                 roas >= 4
                   ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                   : roas >= 3
                   ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-              }
+                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+                "text-xs px-2 py-1 whitespace-nowrap"
+              )}
             >
               {roas.toFixed(1)}x
             </Badge>
@@ -364,14 +377,18 @@ export function CampaignTable({ data, onExport }: CampaignTableProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <div className="text-center sm:text-left">
             <CardTitle>Campaign Performance</CardTitle>
             <CardDescription>
               Monitor and analyze your marketing campaigns across all platforms
             </CardDescription>
           </div>
-          <Button onClick={onExport} variant="outline" className="gap-2">
+          <Button
+            onClick={onExport}
+            variant="outline"
+            className="gap-2 w-full sm:w-auto"
+          >
             <Download className="h-4 w-4" />
             Export
           </Button>
@@ -379,103 +396,107 @@ export function CampaignTable({ data, onExport }: CampaignTableProps) {
       </CardHeader>
       <CardContent>
         {/* Filters */}
-        <div className="flex items-center space-x-2 mb-4">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2 mb-4">
           <div className="flex items-center space-x-2 flex-1">
-            <Search className="h-4 w-4 text-muted-foreground" />
+            <Search className="h-5 w-5 sm:h-4 sm:w-4 text-muted-foreground" />
             <Input
               placeholder="Search campaigns..."
               value={globalFilter ?? ""}
               onChange={(e) => setGlobalFilter(e.target.value)}
-              className="max-w-sm"
+              className="w-full sm:max-w-sm"
             />
           </div>
-          <Select value={platformFilter} onValueChange={setPlatformFilter}>
-            <SelectTrigger className="w-[160px]">
-              <Filter className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Platform" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Platforms</SelectItem>
-              <SelectItem value="Google Ads">Google Ads</SelectItem>
-              <SelectItem value="Facebook">Facebook</SelectItem>
-              <SelectItem value="Instagram">Instagram</SelectItem>
-              <SelectItem value="LinkedIn">LinkedIn</SelectItem>
-              <SelectItem value="TikTok">TikTok</SelectItem>
-              <SelectItem value="YouTube">YouTube</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Paused">Paused</SelectItem>
-              <SelectItem value="Completed">Completed</SelectItem>
-              <SelectItem value="Draft">Draft</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+            <Select value={platformFilter} onValueChange={setPlatformFilter}>
+              <SelectTrigger className="w-full sm:w-[160px]">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Platform" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Platforms</SelectItem>
+                <SelectItem value="Google Ads">Google Ads</SelectItem>
+                <SelectItem value="Facebook">Facebook</SelectItem>
+                <SelectItem value="Instagram">Instagram</SelectItem>
+                <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                <SelectItem value="TikTok">TikTok</SelectItem>
+                <SelectItem value="YouTube">YouTube</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full sm:w-[140px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Paused">Paused</SelectItem>
+                <SelectItem value="Completed">Completed</SelectItem>
+                <SelectItem value="Draft">Draft</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Table */}
         <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className="hover:bg-muted/50"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id} className="whitespace-nowrap">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
                     ))}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No campaigns found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className="hover:bg-muted/50"
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="whitespace-nowrap">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No campaigns found.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <div className="text-sm text-muted-foreground">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:space-x-2 py-4">
+          <div className="text-sm text-muted-foreground text-center sm:text-left">
             Showing {table.getFilteredRowModel().rows.length} of {data.length}{" "}
             campaigns
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-center sm:justify-end space-x-2">
             <Button
               variant="outline"
               size="sm"
